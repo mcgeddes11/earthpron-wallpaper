@@ -23,7 +23,10 @@ def changeBG(path):
         ctypes.windll.user32.SystemParametersInfoA(SPI_SETDESKWALLPAPER, 4, path, 3)
 
 url = "https://www.reddit.com/r/earthporn"
-output_folder = "C:\\Users\\joncocks\\Pictures\\earthpron"
+profile_folder = os.getenv("USERPROFILE")
+output_folder = os.path.join(profile_folder, "Pictures", "earthpron")
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
 
 def get_new_images():
     existing_images = os.listdir(output_folder)
