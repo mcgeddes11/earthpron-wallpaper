@@ -22,7 +22,7 @@ def changeBG(path):
     else:
         ctypes.windll.user32.SystemParametersInfoA(SPI_SETDESKWALLPAPER, 4, path, 3)
 
-url = "https://www.reddit.com/r/earthporn"
+url = "https://www.reddit.com/r/earthporn/top/?t=all"
 profile_folder = os.getenv("USERPROFILE")
 output_folder = os.path.join(profile_folder, "Pictures", "earthpron")
 if not os.path.exists(output_folder):
@@ -56,10 +56,12 @@ def get_new_images():
 def get_image(url, output_filename):
     r = requests.get(url, stream=True, headers={'User-Agent': 'Mozilla/5.0'})
     r.raw.decode_content = True
-
-    # Open a local file with wb ( write binary ) permission.
-    with open(output_filename, 'wb') as f:
-        shutil.copyfileobj(r.raw, f)
+    if r.status_code == 200:
+        # Open a local file with wb ( write binary ) permission.
+        with open(output_filename, 'wb') as f:
+            shutil.copyfileobj(r.raw, f)
+    else:
+        print("file not found, skipping: {}".format(os.path.basename(output_filename)))
 
 
 def update_wallpaper():
