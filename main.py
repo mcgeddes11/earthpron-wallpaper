@@ -22,13 +22,14 @@ def changeBG(path):
     else:
         ctypes.windll.user32.SystemParametersInfoA(SPI_SETDESKWALLPAPER, 4, path, 3)
 
-url = "https://www.reddit.com/r/earthporn/top/?t=all"
+url = "https://www.reddit.com/r/earthporn/"
 profile_folder = os.getenv("USERPROFILE")
 output_folder = os.path.join(profile_folder, "Pictures", "earthpron")
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-def get_new_images():
+def get_new_images(mode="hot"):
+    fetch_url = url + mode
     existing_images = os.listdir(output_folder)
     response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
     response.raise_for_status()
@@ -75,5 +76,6 @@ def update_wallpaper():
 
 
 if __name__ == "__main__":
+    # TODO: add command line args to specify one of ["new", "top", "hot"], default to "hot"
     get_new_images()
     update_wallpaper()
